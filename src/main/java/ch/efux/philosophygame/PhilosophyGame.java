@@ -6,23 +6,31 @@ package ch.efux.philosophygame;
 public class PhilosophyGame {
 
     public static void main(String[] args) {
+        PhilosophyGame pGame = new PhilosophyGame();
+        pGame.run("Tee", "Philosophie");
+    }
 
+    private int maxN = 20;
 
-        String start = "/wiki/Tee";
-        String end = "Philosophie";
+    public void setMaximalTries(int maxN) {
+        this.maxN = maxN;
+    }
+
+    public int run(String start, String end) {
+        String begin = "/wiki/" + start;
 
         int n = 0;
-        int maxN = 20;
 
-        LinkFinder linkFinder = new LinkFinder(start, end);
+        LinkFinder linkFinder = new LinkFinder(begin, end);
 
         while(!linkFinder.getTitle().contains(end) && n < maxN) {
-            // WebElement element = driver.findElement(By.id("mw-content-text"));
             linkFinder.next();
             n++;
         }
 
         linkFinder.close();
+
+        return n;
     }
 
 }
