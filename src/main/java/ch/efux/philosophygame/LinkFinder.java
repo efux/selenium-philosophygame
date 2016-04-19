@@ -3,6 +3,7 @@ package ch.efux.philosophygame;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.regex.Matcher;
@@ -26,7 +27,7 @@ public class LinkFinder {
     public String next() {
         driver.get(link + position);
         WebElement pElement = driver.findElement(By.cssSelector("#mw-content-text > p"));
-        position = findLinkWithoutBrackets(pElement.getAttribute("innerHTML"));
+        position = findSuitableLink(pElement.getAttribute("innerHTML"));
         return position;
     }
 
@@ -38,7 +39,17 @@ public class LinkFinder {
         driver.close();
     }
 
-    private String findLinkWithoutBrackets(String innerHTML) {
+    /**
+     * Searches for a suitable link in the innerHTML.
+     *
+     * A link is suitable if the following criteria are met:
+     * - the link is not in brackets
+     * - the link is not cursive
+     *
+     * @param innerHTML html code as String
+     * @return link to the next page to visit
+     */
+    private String findSuitableLink(String innerHTML) {
         String searchString = "<a href=\"";
 
         Pattern pattern = Pattern.compile("\"(.+?)\"");
@@ -47,32 +58,27 @@ public class LinkFinder {
         int countOfBrackets = 0;
         int countOfCursive = 0;
         while(innerHTML.length() > searchString.length()) {
-            if(innerHTML.startsWith(searchString)) {
-                if(countOfBrackets == 0 && countOfCursive == 0) {
-                    matcher = pattern.matcher(innerHTML);
-                    if(matcher.find()) {
-                        return innerHTML.substring(matcher.start()+1, matcher.end()-1);
-                    }
+            if(countOfBrackets == 0 && countOfCursive == 0 && innerHTML.startsWith(searchString)) {
+                matcher = pattern.matcher(innerHTML);
+                if (matcher.find()) {
+                    return innerHTML.substring(matcher.start() + 1, matcher.end() - 1);
                 }
             } else {
                 if (innerHTML.startsWith("(")) {
                     countOfBrackets++;
-                } else {
-                    if(innerHTML.startsWith("<i>")) {
-                        countOfCursive++;
-                    }
+                }
+                if(innerHTML.startsWith("<i>")) {
+                    countOfCursive++;
                 }
                 if (innerHTML.startsWith(")")) {
                     countOfBrackets--;
-                } else {
-                    if(innerHTML.startsWith("</i>")) {
-                        countOfCursive--;
-                    }
+                }
+                if(innerHTML.startsWith("</i>")) {
+                    countOfCursive--;
                 }
             }
             innerHTML = innerHTML.substring(1);
         }
         return "";
     }
-
 }
