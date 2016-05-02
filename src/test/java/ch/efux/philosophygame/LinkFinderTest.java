@@ -30,9 +30,14 @@ public class LinkFinderTest {
 
     @Test
     public void testWithBrackets() {
-        linkFinder.close();
-        linkFinder = new LinkFinder("/wiki/Justus_Heinrich_Dresler", "Philosophie");
+        linkFinder.setPosition("/wiki/Justus_Heinrich_Dresler");
         assertEquals("/wiki/Mathematiker", linkFinder.next());
+    }
+
+    @Test
+    public void testPageWithList() {
+        linkFinder.setPosition("/wiki/Maus");
+        assertEquals("/wiki/Kleins%C3%A4uger", linkFinder.next());
     }
 
 }

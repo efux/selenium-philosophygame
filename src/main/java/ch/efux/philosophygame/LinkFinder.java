@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.List;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,9 +28,25 @@ public class LinkFinder {
 
     public String next() {
         driver.get(link + position);
-        WebElement pElement = driver.findElement(By.cssSelector("#mw-content-text > p"));
-        position = findSuitableLink(pElement.getAttribute("innerHTML"));
+        WebElement divElement = driver.findElement(By.cssSelector("#mw-content-text"));
+        List<WebElement> pElements = divElement.findElements(By.xpath("./*"));
+        position = "";
+        Iterator<WebElement> it = pElements.iterator();
+        while(position == "" && it.hasNext()) {
+            WebElement pElement = it.next();
+            if(!excludeTagFromSearch(pElement.getTagName())) {
+                position = findSuitableLink(pElement.getAttribute("innerHTML"));
+            }
+        }
         return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public boolean excludeTagFromSearch(String tagName) {
+        return tagName.equals("table") || tagName.equals("div");
     }
 
     public String getTitle() {
