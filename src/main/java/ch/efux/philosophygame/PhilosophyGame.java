@@ -1,14 +1,13 @@
 package ch.efux.philosophygame;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by efux on 18.04.2016.
  */
 public class PhilosophyGame {
-
-    public static void main(String[] args) {
-        PhilosophyGame pGame = new PhilosophyGame();
-        pGame.run("Tee", "Philosophie");
-    }
 
     private int maxN = 20;
 

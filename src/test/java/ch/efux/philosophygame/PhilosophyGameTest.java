@@ -6,6 +6,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
+ * Test the PhilosophyGame class.
+ *
  * Created by efux on 19.04.2016.
  */
 public class PhilosophyGameTest {
@@ -31,6 +33,11 @@ public class PhilosophyGameTest {
     @Test
     public void testPhilosophieLoop() {
         assertEquals(20, pGame.run("Philosophie", "Tee"));
+    }
+
+    @Test
+    public void testHausToPhilosophie() {
+        assertEquals(16, pGame.run("Haus", "Philosophie"));
     }
 
 }

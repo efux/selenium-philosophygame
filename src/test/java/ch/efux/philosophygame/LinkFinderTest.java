@@ -7,6 +7,14 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
+ * This class tests the LinkFinder class.
+ *
+ * There are several special cases tested:
+ * - if the first link is after brackets
+ * - if the wikipedia page contains a table on the side
+ * - a normal case
+ * - if the wikipedia page contains a list (multiple definitions of the same word)
+ *
  * Created by efux on 19.04.2016.
  */
 public class LinkFinderTest {
@@ -38,6 +46,15 @@ public class LinkFinderTest {
     public void testPageWithList() {
         linkFinder.setPosition("/wiki/Maus");
         assertEquals("/wiki/Kleins%C3%A4uger", linkFinder.next());
+    }
+
+    @Test
+    public void testExcludeTagFromSearch() {
+        assertEquals(true, LinkFinder.excludeTagFromSearch("table"));
+        assertEquals(true, LinkFinder.excludeTagFromSearch("div"));
+        assertEquals(false, LinkFinder.excludeTagFromSearch("p"));
+        assertEquals(false, LinkFinder.excludeTagFromSearch("ul"));
+        assertEquals(false, LinkFinder.excludeTagFromSearch("a"));
     }
 
 }

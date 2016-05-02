@@ -28,8 +28,7 @@ public class LinkFinder {
 
     public String next() {
         driver.get(link + position);
-        WebElement divElement = driver.findElement(By.cssSelector("#mw-content-text"));
-        List<WebElement> pElements = divElement.findElements(By.xpath("./*"));
+        List<WebElement> pElements  = driver.findElement(By.cssSelector("#mw-content-text")).findElements(By.xpath("./*"));
         position = "";
         Iterator<WebElement> it = pElements.iterator();
         while(position == "" && it.hasNext()) {
@@ -45,8 +44,10 @@ public class LinkFinder {
         this.position = position;
     }
 
-    public boolean excludeTagFromSearch(String tagName) {
-        return tagName.equals("table") || tagName.equals("div");
+    public final static boolean excludeTagFromSearch(String tagName) {
+        if (tagName.equals("table")) return true;
+        if (tagName.equals("div")) return true;
+        return false;
     }
 
     public String getTitle() {
