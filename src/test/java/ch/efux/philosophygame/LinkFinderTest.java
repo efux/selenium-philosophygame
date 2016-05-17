@@ -49,6 +49,12 @@ public class LinkFinderTest {
     }
 
     @Test
+    public void testWithCornerBrackets() {
+        linkFinder.setPosition("/wiki/Wissenschaft");
+        assertEquals("/wiki/Wissen", linkFinder.next());
+    }
+
+    @Test
     public void testExcludeTagFromSearch() {
         assertEquals(true, LinkFinder.excludeTagFromSearch("table"));
         assertEquals(true, LinkFinder.excludeTagFromSearch("div"));

@@ -74,26 +74,19 @@ public class LinkFinder {
         Pattern pattern = Pattern.compile("\"(.+?)\"");
         Matcher matcher;
 
-        int countOfBrackets = 0;
-        int countOfCursive = 0;
+        int countOfSpecialCases = 0;
         while(innerHTML.length() > searchString.length()) {
-            if(countOfBrackets == 0 && countOfCursive == 0 && innerHTML.startsWith(searchString)) {
+            if(countOfSpecialCases == 0 && innerHTML.startsWith(searchString)) {
                 matcher = pattern.matcher(innerHTML);
                 if (matcher.find()) {
                     return innerHTML.substring(matcher.start() + 1, matcher.end() - 1);
                 }
             } else {
-                if (innerHTML.startsWith("(")) {
-                    countOfBrackets++;
+                if (innerHTML.startsWith("(") || innerHTML.startsWith("[") || innerHTML.startsWith("<i>")) {
+                    countOfSpecialCases++;
                 }
-                if(innerHTML.startsWith("<i>")) {
-                    countOfCursive++;
-                }
-                if (innerHTML.startsWith(")")) {
-                    countOfBrackets--;
-                }
-                if(innerHTML.startsWith("</i>")) {
-                    countOfCursive--;
+                if (innerHTML.startsWith(")") || innerHTML.startsWith("]") || innerHTML.startsWith("</i>")) {
+                    countOfSpecialCases--;
                 }
             }
             innerHTML = innerHTML.substring(1);
